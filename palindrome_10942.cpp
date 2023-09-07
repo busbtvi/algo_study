@@ -1,5 +1,5 @@
 // https://www.acmicpc.net/problem/10942
-#include <bits/stdc++.h>
+#include <iostream>
 using namespace std;
 
 int main(){

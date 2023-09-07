@@ -1,42 +1,63 @@
-use std::io::{self, Read};
-// use scanf::scanf;
+use std::io;
 
 fn main() {
+    let mut dp = [[false; 2001]; 2001];
     let mut buffer = String::new();
-    // // match io::stdin().read_line(&mut buffer)
-    // // {
-    // //     Ok(n) => {
-    // //         println!("{} bytes read", n);
-    // //         println!("{}", buffer);
-    // //     }
-    // //     Err(error) => println!("error: {}", error),
-    // // }
 
-    // let stdin = io::stdin()
-    //     .read_line(&mut buffer)
-    //     .expect("error");
-    // println!("hello, {}", buffer);
-
-    // println!("Price of {} is {:.2}", integer, float);
-
-    let mut n = 0;
-    // let mut m = 0;
-
-    // let mut nums: [i32; 2001] = [0; 2001];
     io::stdin()
         .read_line(&mut buffer)
         .expect("read n fail");
-    n = buffer.trim().parse().expect("parsing fail");
-
-    let mut nums = vec![0; n];
+    let n = buffer.trim().parse().expect("parsing fail");
+    
+    buffer.clear();
     io::stdin()
         .read_line(&mut buffer)
         .expect("read numbers failed");
     let nums = buffer.trim()
         .split_whitespace()
-        .map(|x| x.parse().expect("parse error"));
+        .map(|x| x.parse::<i32>())
+        .collect::<Result<Vec<i32>, _>>()
+        .unwrap();
     
-    for i in 1..n+1 {
-        // io::stdin().
+    for i in 0..n {
+        for j in 0..i+1 {
+            dp[i][j] = 
+                if i == j { true }
+                else if i-1 == j { nums[i] == nums[j] }
+                else { dp[i-1][j+1] && nums[i]==nums[j] }
+        }
     }
+
+    // for i in 0..n {
+    //     for j in 0..n {
+    //         print!("{} ", dp[i][j]);
+    //     }
+    //     println!();
+    // }
+
+    buffer.clear();
+    io::stdin()
+        .read_line(&mut buffer)
+        .expect("read n fail");
+    let m:usize = buffer.trim().parse().expect("parsing fail");
+
+    let mut i = 0;
+    while i < m {
+        buffer.clear();
+        io::stdin()
+            .read_line(&mut buffer)
+            .expect("s,e read failed");
+        let se = buffer.trim()
+            .split_whitespace()
+            .map(|x| x.parse::<usize>())
+            .collect::<Result<Vec<usize>, _>>()
+            .unwrap();
+
+        println!("{}", if dp[se[1]-1][se[0]-1] {"1"} else {"0"} );
+        i += 1;
+    }
+
+    // for i in 0..n {
+    //     println!("{}", nums[i]);
+    // }
 }
