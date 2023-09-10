@@ -1,23 +1,19 @@
-use std::io;
+use std::fmt::Write;
+use std::io::{stdin, Read};
 
 fn main() {
     let mut dp = [[false; 2001]; 2001];
-    let mut buffer = String::new();
-
-    io::stdin()
-        .read_line(&mut buffer)
-        .expect("read n fail");
-    let n = buffer.trim().parse().expect("parsing fail");
+    let mut nums: [usize; 2001] = [0; 2001];
+    let mut output = String::new();
+    let mut input = String::new();
     
-    buffer.clear();
-    io::stdin()
-        .read_line(&mut buffer)
-        .expect("read numbers failed");
-    let nums = buffer.trim()
-        .split_whitespace()
-        .map(|x| x.parse::<i32>())
-        .collect::<Result<Vec<i32>, _>>()
-        .unwrap();
+    stdin().read_to_string(&mut input).unwrap();
+    let mut input_nums = input.split_ascii_whitespace().flat_map(str::parse::<usize>);
+
+    let n: usize = input_nums.next().unwrap();
+    for i in 0..n {
+        nums[i] = input_nums.next().unwrap();
+    }
     
     for i in 0..n {
         for j in 0..i+1 {
@@ -28,36 +24,12 @@ fn main() {
         }
     }
 
-    // for i in 0..n {
-    //     for j in 0..n {
-    //         print!("{} ", dp[i][j]);
-    //     }
-    //     println!();
-    // }
-
-    buffer.clear();
-    io::stdin()
-        .read_line(&mut buffer)
-        .expect("read n fail");
-    let m:usize = buffer.trim().parse().expect("parsing fail");
-
-    let mut i = 0;
-    while i < m {
-        buffer.clear();
-        io::stdin()
-            .read_line(&mut buffer)
-            .expect("s,e read failed");
-        let se = buffer.trim()
-            .split_whitespace()
-            .map(|x| x.parse::<usize>())
-            .collect::<Result<Vec<usize>, _>>()
-            .unwrap();
-
-        println!("{}", if dp[se[1]-1][se[0]-1] {"1"} else {"0"} );
-        i += 1;
+    let m = input_nums.next().unwrap();
+    for _ in 0..m {
+        let s = input_nums.next().unwrap();
+        let e: usize = input_nums.next().unwrap();
+        let result = if dp[e-1][s-1] {"1"} else {"0"};
+        writeln!(output, "{}", result).unwrap();
     }
-
-    // for i in 0..n {
-    //     println!("{}", nums[i]);
-    // }
+    print!("{}", output);
 }
