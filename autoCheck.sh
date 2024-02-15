@@ -41,6 +41,10 @@ SampleData=`curl -s -A "Mozilla/5.0" $Url | awk '/<pre class=\"sampledata\"/,/<\
 PRE_IFS=$IFS # 본래 IFS값을 백업해논다.
 IFS=$'\t`'
 
+if [ -f "local.sample" ]; then
+    SampleData+="$(cat local.sample)"
+fi
+
 CurrentMode="none"
 CurrentTest=1
 AllTestSuccess=true
@@ -66,6 +70,12 @@ for word in $SampleData; do
                 printf "\e[92m $CurrentTest: pass\n\e[0m"
             else
                 printf "\e[91m $CurrentTest: fail\n\e[0m"
+                echo "----- Input -----"
+                cat ./sample.input
+                echo "----- Expected -----"
+                cat ./sample.output
+                echo "----- Result -----"
+                echo $Result
                 AllTestSuccess=false
             fi
         fi
@@ -73,12 +83,13 @@ for word in $SampleData; do
     fi
 done
 
+IFS=$PRE_IFS # IFS 원상 복구
+
 if [ $AllTestSuccess == true ]; then
     printf "\nAll tests passed\n"
 else
     printf "\n\e[91mSome tests failed\e[0m\n"
 fi
-IFS=$PRE_IFS # IFS 원상 복구
 
 # rm ./target.out
 rm ./sample.input ./sample.output
