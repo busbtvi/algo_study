@@ -1,28 +1,23 @@
 #!/bin/bash
 # find all untracked .cpp files and save as array
-UntrackedCppFiles=(`git ls-files . --exclude-standard --others | grep \.cpp`)
-# git change 되는건 감지 안됨
-# ls -t
+UntrackedCppFiles=(`ls -t | grep \.cpp`)
 
-# if there are more than one untracked .cpp files, prompt user to select one
-# if there are no untracked .cpp files, exit
-if [ "${#UntrackedCppFiles[@]}" -gt 1 ]; then
-    PS3="Select file to test: "
-    select file in "${UntrackedCppFiles[@]}"
-    do
-        if [ $REPLY -gt "${#UntrackedCppFiles[@]}" ]; then
-            echo "Invalid selection"
-        else
-            TargetFile=$file  
-            break
-        fi
-    done
-elif [ "${#UntrackedCppFiles[@]}" -eq 0 ]; then
-    echo "No untracked .cpp files found"
-    exit 1
-else
-    TargetFile=${UntrackedCppFiles[0]}
-fi
+read -p "Check ${UntrackedCppFiles[0]} [(default)y / n] : " yn
+case $yn in
+    [Nn]* )
+        PS3="Select file to test : "
+        select file in "${UntrackedCppFiles[@]}"
+        do
+            if [ $REPLY -gt "${#UntrackedCppFiles[@]}" ]; then
+                echo "Invalid selection"
+            else
+                TargetFile=$file  
+                break
+            fi
+        done;;
+    * ) 
+        TargetFile=${UntrackedCppFiles[0]};;
+esac
 
 # compile
 # clang++ -std=c++17 -g $TargetFile -o ./target.out
