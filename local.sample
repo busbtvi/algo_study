@@ -1,0 +1,18 @@
+	input>avlskndavlknv
+	output>8 1 7 5 11 10 3 6 12 4 13 9 2 
+x 3 0 0 2 0 1 0 1 0 0 1 2
+
+	input>azfhazfgifjpfoqjfpfofjjfqpowfjefpdqkfkfdj
+	output>5 1 40 34 31 39 7 3 29 21 10 37 19 13 32 17 24 8 4 9 41 30 16 23 22 11 38 36 20 14 27 33 18 12 26 15 35 25 28 6 2 
+x 3 0 1 0 0 1 1 1 2 2 1 1 2 1 2 1 0 0 0 0 1 1 2 1 1 0 2 0 1 1 0 1 3 1 0 1 1 0 0 2
+
+	input>abbbaab
+	output>5 6 1 7 4 3 2 
+x 1 2 0 1 1 2
+
+	input>aaaa
+	output>4 3 2 1
+x 1 2 3
+	input>banana
+	output>6 4 2 1 5 3
+x 1 3 0 0 2
