@@ -1,56 +1,43 @@
 // https://www.acmicpc.net/problem/7579
-
-// 전부 다 비활성화한다고 생각 -> 하나씩 덜 비활성화
-// 덜 비활성화 하는 m가 쌓여서 (∑m - M) 이하가 되게 : 가방 중량 제한
-// 추가 비용 c의 감소 = 가치↑
-
-// ==> m이 gap 이하가 되게, c는 최대가 되게
 #include <iostream>
 #include <vector>
 #include <utility>
 using namespace std;
 
 int main(){
-    int n, m, memSum=0, costSum=0, memGap;
+    int n, m, costSum=0;
     cin >> n >> m;
 
     vector<int> mem(n), cost(n);
-    for(int i=0; i<n; i++){
-        cin >> mem[i];
-        memSum += mem[i];
-    }
+    for(int i=0; i<n; i++) cin >> mem[i];
     for(int i=0; i<n; i++){
         cin >> cost[i];
         costSum += cost[i];
     }
-    memGap = memSum - m;
 
-    vector<vector<int>> dp(memGap+1, vector<int>(n, 0));
-    for(int i=mem[0]; i<=memGap; i++) dp[i][0] = cost[0];
-    for(int i=0; i<=memGap; i++){
-        for(int j=1; j<n; j++){
-            if(mem[j] > i) continue;
+    vector<vector<int>> dp(n, vector<int>(costSum+1, 0));
+    for(int j=cost[0]; j<=costSum; j++) dp[0][j] = mem[0];
+    for(int i=1; i<n; i++){
+        for(int j=0; j<=costSum; j++){
+            if(cost[i] > j){
+                dp[i][j] = dp[i-1][j];
+                continue;
+            }
 
             dp[i][j] = max(
-                max(dp[i-1][j], dp[i][j-1]), 
-                dp[i-mem[j]][j-1] + cost[j]
+                dp[i-1][j],
+                dp[i-1][j-cost[i]] + mem[i]
             );
-            // dp[i][j] = max(
-            //     max(dp[i-1][j], j==0 ? 0 : dp[i][j-1]), 
-            //     (j == 0) ? cost[j] : dp[i-mem[j]][j-1] + cost[j]
-            // );
+        }
+    }
+    
+    for(int j=0; j<=costSum; j++){
+        if(dp[n-1][j] >= m){
+            cout << j;
+            break;
         }
     }
 
-    // cout << '\n';
-    // for(int i=0; i<=memGap; i++){
-    //     for(int j=0; j<n; j++)
-    //         cout << dp[i][j] << ' ';
-    //     cout << '\n';
-    // }
-    // cout << '\n';
-
-    cout << costSum - dp[memGap][n-1];
-
     return 0;
 }
+// https://hackids.tistory.com/113
