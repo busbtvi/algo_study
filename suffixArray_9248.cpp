@@ -41,12 +41,17 @@ int main(){
 
 	// lcp
 	vector<int> lcp(sLen);
-	for(int i=0, j, c; i<sLen; i++){
+	for(int i=0, j, c; i<sLen-1;){
 		c = 0;
 		j = suffix[rank[i]-1];
 		while(j+c<sLen && s[i+c]==s[j+c]) c++;
-		
-		lcp[rank[i]] = c;
+
+		do{
+			lcp[rank[i]] = c;
+			i++;
+			j++;
+			c--;
+		}while(c > 0 && rank[i] == rank[j]+1);
 	}
 
 	for(auto c: suffix) cout << c+1 << ' ';
