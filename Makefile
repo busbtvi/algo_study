@@ -1,2 +1,3 @@
 clean :
-	rm -rf *.out *.dSYM local.sample
+	rm -rf *.out *.dSYM
+	touch > local.sample
