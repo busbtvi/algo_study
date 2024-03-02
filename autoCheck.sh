@@ -1,7 +1,12 @@
 #!/bin/bash
-# find all untracked .cpp files and save as array
+function compile(){
+    clang++ -std=c++17 -g $1.cpp -o $1.out
+}
+
+# find the latest cpp file
 UntrackedCppFiles=(`ls -t | grep \.cpp`)
 
+# check user wants to test the latest cpp file
 read -p "Check ${UntrackedCppFiles[0]} [(default)y / n] : " yn
 case $yn in
     [Nn]* )
@@ -19,12 +24,26 @@ case $yn in
         TargetFile=${UntrackedCppFiles[0]};;
 esac
 
+TargetFile=${TargetFile%.cpp}
+
 # compile
-# clang++ -std=c++17 -g $TargetFile -o ./target.out
-TargetExe=${TargetFile%.cpp}.out
+if [ -f $TargetFile.out ]; then
+    # check if the cpp file is newer than the executable
+    cppFileTime=$(date -r $TargetFile.cpp +%s)
+    outFileTime=$(date -r $TargetFile.out +%s)
+    if [ $cppFileTime -gt $outFileTime ]; then
+        printf "\e[93mSource code modified. recompile $TargetFile.cpp\n\e[0m"
+        compile $TargetFile
+    fi
+else
+    printf "\e[93mNo Executablbe file. compiling $TargetFile.cpp\n\e[0m"
+    compile $TargetFile
+    # clang++ -std=c++17 -g $TargetFile -o ${TargetFile%.cpp}.out
+fi
+TargetExe=$TargetFile.out
 
 # get sample data
-Url=`head -n 1 $TargetFile`
+Url=`head -n 1 $TargetFile.cpp`
 Url=${Url:3}
 # -A "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36"
 
@@ -81,9 +100,9 @@ done
 IFS=$PRE_IFS # IFS 원상 복구
 
 if [ $AllTestSuccess == true ]; then
-    printf "\nAll tests passed\n"
+    printf "\n\e[92mAll tests passed\n\e[0m"
 else
-    printf "\n\e[91mSome tests failed\e[0m\n"
+    printf "\n\e[91mSome tests failed\e[0m"
 fi
 
 # rm ./target.out
