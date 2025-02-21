@@ -48,7 +48,7 @@ Url=${Url:3}
 # -A "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36"
 
 # get HTML source, and extract sample data wrapped in <pre class="sampledata"></pre> tag
-SampleData=`curl -s -A "Mozilla/5.0" $Url | awk '/<pre class=\"sampledata\"/,/<\/pre>/'`
+SampleData=`curl -s -A "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)" $Url | awk '/<pre class=\"sampledata\"/,/<\/pre>/'`
 # SampleData=`sed -n '/From/,/To/p'`
 # https://mywiki.wooledge.org/BashFAQ/073
 
