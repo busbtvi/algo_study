@@ -30,7 +30,7 @@
         "-fcolor-diagnostics",
         "-fansi-escape-codes",
         "-std=c++11",
-        "-g",
+        // "-g",
         "${file}",
         "-o",
         "${fileDirname}/${fileBasenameNoExtension}",
