@@ -1,6 +1,6 @@
 #!/bin/bash
 function compile(){
-    clang++ -std=c++17 -g $1.cpp -o $1.out
+    clang++ -std=c++17 $1.cpp -o $1.out
 }
 
 # find the latest cpp file
@@ -75,7 +75,7 @@ for word in $SampleData; do
     echo $word > ./sample.$CurrentMode
 
     if [ $CurrentMode == "output" ]; then
-        Result=`timeout 3s ./$TargetExe < sample.input`
+        Result=`gtimeout 3s ./$TargetExe < sample.input`
         if [ $? -eq 124 ]; then 
             printf "\e[93m $CurrentTest: Timeout\n\e[0m"
             AllTestSuccess=false
