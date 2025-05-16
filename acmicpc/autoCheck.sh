@@ -55,9 +55,11 @@ SampleData=`curl -s -A "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)" $Url | 
 PRE_IFS=$IFS # 본래 IFS값을 백업해논다.
 IFS=$'\t`'
 
-if [ -f "local.sample" ]; then
-    SampleData+="$(cat local.sample)"
-fi
+# sample data doesn't have answer..
+# check at parents directory
+# if [ -f "../local.sample" ]; then
+#     SampleData+="$(cat ../local.sample)"
+# fi
 
 CurrentMode="none"
 CurrentTest=1
