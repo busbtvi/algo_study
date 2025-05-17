@@ -1,6 +1,6 @@
 #!/bin/bash
 function compile(){
-    clang++ -std=c++17 $1.cpp -o $1.out
+    clang++ -std=c++17 $1.cpp -o $1
 }
 
 # find the latest cpp file
@@ -27,10 +27,10 @@ esac
 TargetFile=${TargetFile%.cpp}
 
 # compile
-if [ -f $TargetFile.out ]; then
+if [ -f $TargetFile ]; then
     # check if the cpp file is newer than the executable
     cppFileTime=$(date -r $TargetFile.cpp +%s)
-    outFileTime=$(date -r $TargetFile.out +%s)
+    outFileTime=$(date -r $TargetFile +%s)
     if [ $cppFileTime -gt $outFileTime ]; then
         printf "\e[93mSource code modified. recompile $TargetFile.cpp\n\e[0m"
         compile $TargetFile
@@ -38,9 +38,8 @@ if [ -f $TargetFile.out ]; then
 else
     printf "\e[93mNo Executablbe file. compiling $TargetFile.cpp\n\e[0m"
     compile $TargetFile
-    # clang++ -std=c++17 -g $TargetFile -o ${TargetFile%.cpp}.out
 fi
-TargetExe=$TargetFile.out
+TargetExe=$TargetFile
 
 # get sample data
 Url=`head -n 1 $TargetFile.cpp`
